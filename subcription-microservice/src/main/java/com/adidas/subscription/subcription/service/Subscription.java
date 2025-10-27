@@ -1,13 +1,18 @@
 package com.adidas.subscription.subcription.service;
 
+import com.adidas.subscription.subcription.dto.response.SubscriptionResponse;
+import com.adidas.subscription.subcription.dto.request.SubscriptionRequest;
+import java.util.List;
+import java.util.UUID;
+
 public interface Subscription {
 
-  void createSubscription();
+  UUID createSubscription(SubscriptionRequest subscriptionInput);
 
-  void cancelSubscription();
+  void cancelSubscription(SubscriptionRequest subscriptionInput);
 
-  void getDetailSubscription();
+  SubscriptionResponse getDetailSubscription(SubscriptionRequest subscriptionInput);
 
-  void getAllSubscription();
+  List<SubscriptionResponse> getAllSubscription();
 
 }
