@@ -6,7 +6,9 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import java.time.LocalDate;
+import java.util.UUID;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -16,10 +18,11 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class SubscriptionEntity {
   @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private long idSubscription;
+  @GeneratedValue(strategy = GenerationType.UUID)
+  private UUID idSubscription;
   @Column(nullable = false, unique = true)
   private String email;
   @Column(nullable = false)
