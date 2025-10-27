@@ -35,7 +35,6 @@
       <groupId>org.springframework.kafka</groupId>
       <artifactId>spring-kafka</artifactId>
     </dependency>
-
     <!-- 3. Dependencia de prueba estándar -->
     <dependency>
       <groupId>org.springframework.boot</groupId>
