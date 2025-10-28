@@ -9,9 +9,9 @@ public interface Subscription {
 
   UUID createSubscription(SubscriptionRequest subscriptionInput);
 
-  void cancelSubscription(SubscriptionRequest subscriptionInput);
+  void cancelSubscription(UUID subscriptionId);
 
-  SubscriptionResponse getDetailSubscription(String subscriptionId);
+  SubscriptionResponse getDetailSubscription(UUID subscriptionId);
 
   List<SubscriptionResponse> getAllSubscription();
 

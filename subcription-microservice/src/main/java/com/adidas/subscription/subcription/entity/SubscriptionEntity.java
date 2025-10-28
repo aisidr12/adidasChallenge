@@ -6,6 +6,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.UUID;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -35,4 +36,8 @@ public class SubscriptionEntity {
   private String firstName;
   @Column
   private String gender;
+  @Column
+  private Boolean canceled;
+  @Column
+  private LocalDateTime updateAt;
 }

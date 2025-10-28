@@ -7,9 +7,11 @@ import com.adidas.subscription.subcription.kafka.KafkaProducerService;
 import com.adidas.subscription.subcription.repository.SubscriptionRepository;
 import com.adidas.subscription.subcription.service.Subscription;
 import jakarta.transaction.Transactional;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
+import org.apache.kafka.common.errors.ResourceNotFoundException;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -30,16 +32,23 @@ public class SubscriptionImpl implements Subscription {
   }
 
   @Override
-  public void cancelSubscription(SubscriptionRequest subscriptionInput) {
-    SubscriptionEntity entity = mapToEntity(subscriptionInput);
-    subscriptionRepository.delete(entity);
+  public void cancelSubscription(UUID id) {
+//    SubscriptionEntity entity = mapToEntity(subscriptionInput);
+//    subscriptionRepository.delete(entity);
+    SubscriptionEntity subscription = subscriptionRepository.findById(id)
+        .orElseThrow(() -> new ResourceNotFoundException("Subscription not found with ID: " + id));
+    // Solo marcamos como cancelada, no la eliminamos físicamente (soft delete).
+    subscription.setCanceled(true);
+    subscription.setUpdateAt(LocalDateTime.now());
+    subscriptionRepository.save(subscription);
   }
 
   @Override
-  public SubscriptionResponse getDetailSubscription(String email) {
-    return subscriptionRepository.findByEmail(email).map(this::mapToResponse).orElse(new SubscriptionResponse());
-//    return subscriptionRepository.findBySubscriptionId(subscriptionId).map(this::mapToResponse)
-//        .orElse(new SubscriptionResponse());
+  public SubscriptionResponse getDetailSubscription(UUID id) {
+    return subscriptionRepository
+        .findById(id)
+        .map(this::mapToResponse)
+        .orElse(new SubscriptionResponse());
   }
 
 
@@ -66,6 +75,7 @@ public class SubscriptionImpl implements Subscription {
         .newsLetterId(subscriptionRequest.getNewsletterId())
         .gender(subscriptionRequest.getGender())
         .consent(subscriptionRequest.getConsentFlag())
+        .canceled(false)
         .build();
   }
 
