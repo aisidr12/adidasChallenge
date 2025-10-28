@@ -12,4 +12,9 @@ public record SubscriptionResponse(UUID id,
                                    String newsLetterId
 ) {
 
+  public SubscriptionResponse() {
+    this(null, null, null, null, null, null, null);
+  }
+
+
 }
