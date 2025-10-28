@@ -22,7 +22,7 @@ import lombok.Setter;
 public class SubscriptionEntity {
   @Id
   @GeneratedValue(strategy = GenerationType.UUID)
-  private UUID idSubscription;
+  private UUID subscriptionId;
   @Column(nullable = false, unique = true)
   private String email;
   @Column(nullable = false)
