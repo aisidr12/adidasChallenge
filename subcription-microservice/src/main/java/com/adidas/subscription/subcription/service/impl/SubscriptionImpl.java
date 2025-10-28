@@ -3,8 +3,10 @@ package com.adidas.subscription.subcription.service.impl;
 import com.adidas.subscription.subcription.dto.request.SubscriptionRequest;
 import com.adidas.subscription.subcription.dto.response.SubscriptionResponse;
 import com.adidas.subscription.subcription.entity.SubscriptionEntity;
+import com.adidas.subscription.subcription.kafka.KafkaProducerService;
 import com.adidas.subscription.subcription.repository.SubscriptionRepository;
 import com.adidas.subscription.subcription.service.Subscription;
+import jakarta.transaction.Transactional;
 import java.util.List;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
@@ -15,13 +17,16 @@ import org.springframework.stereotype.Service;
 public class SubscriptionImpl implements Subscription {
 
   private final SubscriptionRepository subscriptionRepository;
+  private final KafkaProducerService kafkaProducerService;
 
 
   @Override
+  @Transactional
   public UUID createSubscription(SubscriptionRequest subscriptionInput) {
     SubscriptionEntity entity = mapToEntity(subscriptionInput);
     SubscriptionEntity entityCreated = subscriptionRepository.save(entity);
-    return entityCreated.getIdSubscription();
+    kafkaProducerService.sendSubscriptionCreatedEvent(entityCreated);
+    return entityCreated.getSubscriptionId();
   }
 
   @Override
@@ -31,9 +36,10 @@ public class SubscriptionImpl implements Subscription {
   }
 
   @Override
-  public SubscriptionResponse getDetailSubscription(String subscriptionId) {
-    return subscriptionRepository.findBySubscriptionId(subscriptionId).map(this::mapToResponse)
-        .orElse(new SubscriptionResponse());
+  public SubscriptionResponse getDetailSubscription(String email) {
+    return subscriptionRepository.findByEmail(email).map(this::mapToResponse).orElse(new SubscriptionResponse());
+//    return subscriptionRepository.findBySubscriptionId(subscriptionId).map(this::mapToResponse)
+//        .orElse(new SubscriptionResponse());
   }
 
 
@@ -70,7 +76,7 @@ public class SubscriptionImpl implements Subscription {
    * @return the SubscriptionResponse with the information that we retrieve from entity
    */
   private SubscriptionResponse mapToResponse(SubscriptionEntity entity) {
-    return new SubscriptionResponse(entity.getIdSubscription(), entity.getEmail(),
+    return new SubscriptionResponse(entity.getSubscriptionId(), entity.getEmail(),
         entity.getFirstName(), entity.getGender(), entity.getBirthday(), entity.getConsent(),
         entity.getNewsLetterId());
   }
