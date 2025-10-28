@@ -27,15 +27,15 @@ public class SubscriptionController {
     return ResponseEntity.ok().body(subscription.toString());
   }
 
-  @PostMapping("/cancel")
-  public ResponseEntity<?> cancelSubscription(@RequestBody SubscriptionRequest request) {
-    subscriptionService.cancelSubscription(request);
+  @PostMapping("/cancel/{subscriptionId}")
+  public ResponseEntity<?> cancelSubscription(@PathVariable("subscriptionId") UUID subscriptionId) {
+    subscriptionService.cancelSubscription(subscriptionId);
     return ResponseEntity.ok().build();
   }
 
-  @GetMapping("/detail/{idSubscription}")
+  @GetMapping("/detail/{subscriptionId}")
   public ResponseEntity<SubscriptionResponse> getDetailSubscription(
-      @PathVariable String subscriptionId) {
+      @PathVariable("subscriptionId") UUID subscriptionId) {
     SubscriptionResponse response = subscriptionService.getDetailSubscription(subscriptionId);
     return ResponseEntity.ok().body(response);
   }
