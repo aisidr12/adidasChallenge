@@ -13,12 +13,7 @@
 	<name>subcription-microservice</name>
 	<description>Demo project for Spring Boot</description>
   <dependencies>
-    <!-- https://mvnrepository.com/artifact/org.projectlombok/lombok -->
-    <dependency>
-      <groupId>org.projectlombok</groupId>
-      <artifactId>lombok</artifactId>
-      <version>1.18.42</version>
-    </dependency>
+
     <!-- 2. Persistencia JPA -->
     <dependency>
       <groupId>org.springframework.boot</groupId>
@@ -31,13 +26,7 @@
       <artifactId>h2</artifactId>
       <scope>runtime</scope>
     </dependency>
-
-    <!-- 4. Comunicación Asíncrona (Kafka) -->
-    <dependency>
-      <groupId>org.springframework.kafka</groupId>
-      <artifactId>spring-kafka</artifactId>
-    </dependency>
-    <!-- https://mvnrepository.com/artifact/jakarta.validation/jakarta.validation-api -->
+        <!-- https://mvnrepository.com/artifact/jakarta.validation/jakarta.validation-api -->
     <dependency>
       <groupId>jakarta.validation</groupId>
       <artifactId>jakarta.validation-api</artifactId>
