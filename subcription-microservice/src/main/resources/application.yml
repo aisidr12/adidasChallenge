@@ -1,0 +1,25 @@
+kafka:
+    topic:
+        subscription-created: subscription-created-topic
+server:
+    port: 8081
+spring:
+    application:
+        name: subcription-microservice
+    datasource:
+        driverClassName: org.h2.Driver
+        password: ''
+        url: jdbc:h2:mem:subscriptiondb
+        username: sa
+    h2:
+        console:
+            enabled: true
+    jpa:
+        database-platform: org.hibernate.dialect.H2Dialect
+        hibernate:
+            ddl-auto: update
+    kafka:
+        bootstrap-servers: localhost:9092
+        producer:
+            key-serializer: org.apache.kafka.common.serialization.StringSerializer
+            value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
