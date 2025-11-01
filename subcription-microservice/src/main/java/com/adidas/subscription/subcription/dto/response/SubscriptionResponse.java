@@ -8,7 +8,7 @@ public record SubscriptionResponse(UUID id,
                                    String firstName,
                                    String gender,
                                    LocalDate birthday,
-                                   Boolean consentFlag,
+                                   Boolean acceptNews,
                                    String newsLetterId
 ) {
 

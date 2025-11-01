@@ -1,6 +1,5 @@
 package com.adidas.challenge.email.email.service;
 
-import com.adidas.challenge.email.email.dto.SubscriptionEventDTO;
 import com.adidas.challenge.email.email.dto.SubscriptionEventResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
