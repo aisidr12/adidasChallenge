@@ -1,6 +1,7 @@
 package com.adidas.challenge.email.email.service;
 
 import com.adidas.challenge.email.email.dto.SubscriptionEventDTO;
+import com.adidas.challenge.email.email.dto.SubscriptionEventResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -8,9 +9,10 @@ import org.springframework.stereotype.Service;
 @Service
 public class EmailService {
   private static final Logger logger = LoggerFactory.getLogger(EmailService.class);
-  public void sendSubscriptionCreatedEmail(SubscriptionEventDTO dto) {
+  public void sendSubscriptionCreatedEmail(SubscriptionEventResponse dto) {
     // Mock behaviour: log only
-    logger.info("Mock send email to {} for subscription id={} plan={}", dto.getUserEmail(), dto.getSubscriptionId(), dto.getPlanName());
+    logger.info("Mock send email the info is {}",dto);
+    //logger.info("Mock send email to {} for subscription id={} plan={}", dto.email(), dto.getSubscriptionId(), dto.getPlanName());
   }
 
   //
