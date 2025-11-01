@@ -3,6 +3,7 @@ package com.adidas.subscription.subcription.service.impl;
 import com.adidas.subscription.subcription.dto.request.SubscriptionRequest;
 import com.adidas.subscription.subcription.dto.response.SubscriptionResponse;
 import com.adidas.subscription.subcription.entity.SubscriptionEntity;
+import com.adidas.subscription.subcription.exception.DuplicatedException;
 import com.adidas.subscription.subcription.kafka.KafkaProducerService;
 import com.adidas.subscription.subcription.repository.SubscriptionRepository;
 import com.adidas.subscription.subcription.service.Subscription;
@@ -11,11 +12,14 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.common.errors.ResourceNotFoundException;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class SubscriptionImpl implements Subscription {
 
   private final SubscriptionRepository subscriptionRepository;
@@ -25,10 +29,17 @@ public class SubscriptionImpl implements Subscription {
   @Override
   @Transactional
   public SubscriptionResponse createSubscription(SubscriptionRequest subscriptionInput) {
-    SubscriptionEntity entity = mapToEntity(subscriptionInput);
-    SubscriptionEntity entityCreated = subscriptionRepository.save(entity);
-    SubscriptionResponse subscriptionResponse = mapToResponse(entity);
-    kafkaProducerService.sendSubscriptionCreatedEvent(subscriptionResponse);
+    SubscriptionResponse subscriptionResponse = null;
+    try {
+      SubscriptionEntity entityCreated = subscriptionRepository.saveAndFlush(mapToEntity(subscriptionInput));
+      subscriptionResponse = mapToResponse(entityCreated);
+      kafkaProducerService.sendSubscriptionCreatedEvent(subscriptionResponse);
+    }catch (DataIntegrityViolationException e) {
+      log.error("Constraint violation (H2): {}", e.getMessage(), e);
+      throw new DuplicatedException("This field is already in our records");
+    }catch (Exception e){
+      log.error("error no identificado {}", e.getMessage());
+    }
     return subscriptionResponse;
   }
 
