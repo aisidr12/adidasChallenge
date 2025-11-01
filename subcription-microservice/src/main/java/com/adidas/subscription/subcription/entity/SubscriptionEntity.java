@@ -37,7 +37,7 @@ public class SubscriptionEntity {
   @Column
   private String gender;
   @Column
-  private Boolean canceled;
+  private Boolean cancelSubscription;
   @Column
   private LocalDateTime updateAt;
 }
