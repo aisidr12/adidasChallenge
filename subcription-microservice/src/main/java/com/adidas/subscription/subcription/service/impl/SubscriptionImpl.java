@@ -24,21 +24,20 @@ public class SubscriptionImpl implements Subscription {
 
   @Override
   @Transactional
-  public UUID createSubscription(SubscriptionRequest subscriptionInput) {
+  public SubscriptionResponse createSubscription(SubscriptionRequest subscriptionInput) {
     SubscriptionEntity entity = mapToEntity(subscriptionInput);
     SubscriptionEntity entityCreated = subscriptionRepository.save(entity);
-    kafkaProducerService.sendSubscriptionCreatedEvent(entityCreated);
-    return entityCreated.getSubscriptionId();
+    SubscriptionResponse subscriptionResponse = mapToResponse(entity);
+    kafkaProducerService.sendSubscriptionCreatedEvent(subscriptionResponse);
+    return subscriptionResponse;
   }
 
   @Override
   public void cancelSubscription(UUID id) {
-//    SubscriptionEntity entity = mapToEntity(subscriptionInput);
-//    subscriptionRepository.delete(entity);
     SubscriptionEntity subscription = subscriptionRepository.findById(id)
         .orElseThrow(() -> new ResourceNotFoundException("Subscription not found with ID: " + id));
     // Solo marcamos como cancelada, no la eliminamos físicamente (soft delete).
-    subscription.setCanceled(true);
+    subscription.setCancelSubscription(true);
     subscription.setUpdateAt(LocalDateTime.now());
     subscriptionRepository.save(subscription);
   }
@@ -75,7 +74,7 @@ public class SubscriptionImpl implements Subscription {
         .newsLetterId(subscriptionRequest.getNewsletterId())
         .gender(subscriptionRequest.getGender())
         .consent(subscriptionRequest.getConsentFlag())
-        .canceled(false)
+        .cancelSubscription(false)
         .build();
   }
 

@@ -7,7 +7,7 @@ import java.util.UUID;
 
 public interface Subscription {
 
-  UUID createSubscription(SubscriptionRequest subscriptionInput);
+  SubscriptionResponse createSubscription(SubscriptionRequest subscriptionInput);
 
   void cancelSubscription(UUID subscriptionId);
 

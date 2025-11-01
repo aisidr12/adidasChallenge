@@ -22,9 +22,9 @@ public class SubscriptionController {
   private final Subscription subscriptionService;
 
   @PostMapping("/create")
-  public ResponseEntity<String> createSubscription(@RequestBody SubscriptionRequest request) {
-    UUID subscription = subscriptionService.createSubscription(request);
-    return ResponseEntity.ok().body(subscription.toString());
+  public ResponseEntity<SubscriptionResponse> createSubscription(@RequestBody SubscriptionRequest request) {
+    SubscriptionResponse subscription = subscriptionService.createSubscription(request);
+    return ResponseEntity.ok().body(subscription);
   }
 
   @PostMapping("/cancel/{subscriptionId}")
