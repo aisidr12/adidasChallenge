@@ -18,10 +18,8 @@ public class SubscriptionEventConsumer {
 
   private final EmailService emailService;
   private final ObjectMapper objectMapper;
-//  @Value("${kafka.topic.subscription-created}")
-//  private String topicName;
 
-  @KafkaListener(topics = "subscription-created-topic", groupId = "email-service-group")
+  @KafkaListener(topics = "${kafka.topic.name}", groupId = "${kafka.group.id}")
   public void consumeSubscriptionEvent(String message) {
     try {
       logger.info("Mensaje recibido de Kafka: {}", message);
