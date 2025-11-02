@@ -4,9 +4,11 @@ import com.adidas.subscription.subcription.dto.request.SubscriptionRequest;
 import com.adidas.subscription.subcription.dto.response.SubscriptionResponse;
 import com.adidas.subscription.subcription.entity.SubscriptionEntity;
 import com.adidas.subscription.subcription.exception.DuplicatedException;
+import com.adidas.subscription.subcription.exception.SqsExceptionCustom;
 import com.adidas.subscription.subcription.kafka.KafkaProducerService;
 import com.adidas.subscription.subcription.repository.SubscriptionRepository;
 import com.adidas.subscription.subcription.service.Subscription;
+import com.adidas.subscription.subcription.sqs.SqsClientService;
 import jakarta.transaction.Transactional;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -24,6 +26,7 @@ public class SubscriptionImpl implements Subscription {
 
   private final SubscriptionRepository subscriptionRepository;
   private final KafkaProducerService kafkaProducerService;
+  private final SqsClientService sqsClientService;
 
 
   @Override
@@ -34,11 +37,13 @@ public class SubscriptionImpl implements Subscription {
       SubscriptionEntity entityCreated = subscriptionRepository.saveAndFlush(mapToEntity(subscriptionInput));
       subscriptionResponse = mapToResponse(entityCreated);
       kafkaProducerService.sendSubscriptionCreatedEvent(subscriptionResponse);
+      sqsClientService.sendMessage(subscriptionResponse);
     }catch (DataIntegrityViolationException e) {
       log.error("Constraint violation (H2): {}", e.getMessage(), e);
       throw new DuplicatedException("This field is already in our records");
     }catch (Exception e){
       log.error("error no identificado {}", e.getMessage());
+      throw new SqsExceptionCustom("Error sending the message");
     }
     return subscriptionResponse;
   }

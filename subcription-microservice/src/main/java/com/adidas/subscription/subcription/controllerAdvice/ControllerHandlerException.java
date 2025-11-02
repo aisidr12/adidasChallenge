@@ -2,6 +2,7 @@ package com.adidas.subscription.subcription.controllerAdvice;
 
 import com.adidas.subscription.subcription.dto.error.ErrorResponse;
 import com.adidas.subscription.subcription.exception.DuplicatedException;
+import com.adidas.subscription.subcription.exception.SqsExceptionCustom;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -15,6 +16,13 @@ public class ControllerHandlerException {
     return new ResponseEntity<ErrorResponse>(
         new ErrorResponse("ADIDAS-001", duplicatedException.getMessage())
         , HttpStatus.BAD_REQUEST);
+  }
+
+  @ExceptionHandler(SqsExceptionCustom.class)
+  public ResponseEntity<ErrorResponse> handleRepeatEmail(SqsExceptionCustom sqsExceptionCustom) {
+    return new ResponseEntity<ErrorResponse>(
+        new ErrorResponse("ADIDAS-002", sqsExceptionCustom.getMessage())
+        , HttpStatus.INTERNAL_SERVER_ERROR);
   }
 
 }

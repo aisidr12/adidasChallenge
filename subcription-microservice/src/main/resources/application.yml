@@ -23,3 +23,22 @@ spring:
         producer:
             key-serializer: org.apache.kafka.common.serialization.StringSerializer
             value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+    cloud:
+      aws:
+        region:
+          static: eu-west-1
+        credentials:
+          access-key: ${AWS_ACCESS_KEY_ID}
+          secret-key: ${AWS_SECRET_ACCESS_KEY}
+        sqs:
+          endpoint: https://sqs.eu-west-1.amazonaws.com
+
+aws:
+  sqs:
+    queue:
+      subscription-events: ${SQS_SUBSCRIPTION_QUEUE_URL:https://sqs.eu-west-1.amazonaws.com/286646249098/subscription-events}
+
+logging:
+  level:
+    com.amazonaws: DEBUG
+    io.awspring.cloud: DEBUG
