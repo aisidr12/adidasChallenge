@@ -32,7 +32,7 @@ public class SubscriptionImpl implements Subscription {
   @Override
   @Transactional
   public SubscriptionResponse createSubscription(SubscriptionRequest subscriptionInput) {
-    SubscriptionResponse subscriptionResponse = null;
+    SubscriptionResponse subscriptionResponse;
     try {
       SubscriptionEntity entityCreated = subscriptionRepository.saveAndFlush(mapToEntity(subscriptionInput));
       subscriptionResponse = mapToResponse(entityCreated);
