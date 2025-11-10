@@ -3,10 +3,12 @@ package com.adidas.subscription.subcription.controller;
 import com.adidas.subscription.subcription.dto.request.SubscriptionRequest;
 import com.adidas.subscription.subcription.dto.response.SubscriptionResponse;
 import com.adidas.subscription.subcription.service.Subscription;
+import jakarta.validation.Valid;
 import java.util.List;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -16,13 +18,14 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/v0/Subscription")
+@Validated
 @RequiredArgsConstructor
 public class SubscriptionController {
 
   private final Subscription subscriptionService;
 
   @PostMapping("/create")
-  public ResponseEntity<SubscriptionResponse> createSubscription(@RequestBody SubscriptionRequest request) {
+  public ResponseEntity<SubscriptionResponse> createSubscription(@Valid @RequestBody SubscriptionRequest request) {
     SubscriptionResponse subscription = subscriptionService.createSubscription(request);
     return ResponseEntity.ok().body(subscription);
   }
