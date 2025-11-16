@@ -14,10 +14,10 @@ While most of the inheritance is fine, it also inherits unwanted elements like `
 To prevent this, the project POM contains empty overrides for these elements.
 If you manually switch to a different parent and actually want the inheritance, you need to remove those overrides.
 
-# How to use this microservices
+# How to use these microservices
 ## Run docker compose
 1-  Run the docker compose to run Kafka via docker. <br>
-2-  use the following command: docker-compose up 
+2-  use the following command once you are in the root of the project:  docker-compose up 
 
 ## Run Microservices
 1- First use the command  ' mvn clean install ' to install dependencies
